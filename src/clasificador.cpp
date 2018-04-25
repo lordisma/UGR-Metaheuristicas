@@ -31,5 +31,7 @@ float KNN(const vector<int> &train, const vector<int> &test, vector<vector<float
 			success++;
 		}
 	}
+
+	//cout << "\n Numero de exitos: " << success;
 	return (100.0 * (success * (1.0/trainSize)));
 }

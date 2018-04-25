@@ -1,6 +1,6 @@
 #include <generador.h>
 
-unsigned long Seed = 0L;
+unsigned long Seed = 50627728;
 
 #define MASK 2147483647
 #define PRIME 65539

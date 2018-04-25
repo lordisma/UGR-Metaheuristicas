@@ -89,6 +89,14 @@ void Datos::clearData(){
 	test5.clear();
 }
 
+////////////////////////////////////////////////////////////////////////////
+/*
+*	@brief: normaliza los datos genera la matriz transpuesta? (necesario?????)
+*					y itera sobre la caracteristica correspondiente buscando el maximo y el minimo
+*					tras encontraarlos normaliza cada dato de la matriz.
+*
+*/
+
 void Datos::normalizeData(){
 	vector<vector<float>> trasposeMatrix;
 	vector<float> characteristics;
@@ -114,6 +122,14 @@ void Datos::normalizeData(){
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////
+/*
+*	@brief: Funcion de particionado de los datos los divide de la siguuiennte forma
+*					separa clase 1 y clase 2 itera sobre los vectores resultados y va metiendo cada numero
+*					En las cuatro particiones train y en una test, asegurandose de que no se repita el
+*					numero al que hace referencia
+*/
+
 void Datos::partitionData(){
 	vector<int> indexLabel1, indexLabel2;
 	int matrixDataSize = matrixData.size();
@@ -133,7 +149,7 @@ void Datos::partitionData(){
 				train2.push_back(indexLabel1[i]);
 				train3.push_back(indexLabel1[i]);
 				train4.push_back(indexLabel1[i]);
-				test5.push_back(indexLabel1[i]);				
+				test5.push_back(indexLabel1[i]);
 				break;
 			}
 			case 1:{
@@ -178,7 +194,7 @@ void Datos::partitionData(){
 				train2.push_back(indexLabel2[i]);
 				train3.push_back(indexLabel2[i]);
 				train4.push_back(indexLabel2[i]);
-				test5.push_back(indexLabel2[i]);				
+				test5.push_back(indexLabel2[i]);
 				break;
 			}
 			case 1:{

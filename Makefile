@@ -9,12 +9,18 @@ CPPFLAGS = -O3 -g -c -std=c++11 -I$(INC)
 
 # ************ Compilacion de los Programas ************
 
-all: $(BIN)/ClasificadorKNN
+all: $(BIN)/ClasificadorKNN $(BIN)/Genetico
 
 $(BIN)/ClasificadorKNN: $(OBJ)/clasificadorknn.o $(OBJ)/clasificador.o $(OBJ)/datos.o $(OBJ)/generador.o $(OBJ)/localsearch.o $(OBJ)/relief.o $(OBJ)/temporizador.o
 	$(CXX) $(OBJ)/clasificadorknn.o $(OBJ)/clasificador.o $(OBJ)/datos.o $(OBJ)/generador.o $(OBJ)/localsearch.o $(OBJ)/relief.o $(OBJ)/temporizador.o -o $(BIN)/ClasificadorKNN
 
+$(BIN)/Genetico: $(OBJ)/Genetico.o $(OBJ)/generador.o $(OBJ)/temporizador.o $(OBJ)/datos.o $(OBJ)/main.o
+	$(CXX)  $(OBJ)/main.o $(OBJ)/clasificador.o $(OBJ)/Genetico.o $(OBJ)/generador.o $(OBJ)/datos.o $(OBJ)/temporizador.o -o $(BIN)/Genetico
+
 # ************ Creacion de Objetos ************
+
+$(OBJ)/main.o: $(SRC)/main_AG.cpp $(INC)/temporizador.h $(INC)/generador.h $(INC)/datos.h $(INC)/AGG.h
+	$(CXX) $(CPPFLAGS) $(SRC)/main_AG.cpp -o $(OBJ)/main.o
 
 $(OBJ)/clasificador.o: $(SRC)/clasificador.cpp $(INC)/clasificador.h
 	$(CXX) $(CPPFLAGS) $(SRC)/clasificador.cpp -o $(OBJ)/clasificador.o
@@ -36,6 +42,9 @@ $(OBJ)/relief.o: $(SRC)/relief.cpp $(INC)/relief.h
 
 $(OBJ)/temporizador.o: $(SRC)/temporizador.cpp $(INC)/temporizador.h
 	$(CXX) $(CPPFLAGS) $(SRC)/temporizador.cpp -o $(OBJ)/temporizador.o
+
+$(OBJ)/Genetico.o: $(SRC)/AGG.cpp $(INC)/AGG.h
+	$(CXX) $(CPPFLAGS) $(SRC)/AGG.cpp -o $(OBJ)/Genetico.o
 
 # ************ Limpieza ************
 
