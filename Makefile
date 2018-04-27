@@ -17,6 +17,8 @@ $(BIN)/ClasificadorKNN: $(OBJ)/clasificadorknn.o $(OBJ)/clasificador.o $(OBJ)/da
 $(BIN)/Genetico: $(OBJ)/Genetico.o $(OBJ)/generador.o $(OBJ)/temporizador.o $(OBJ)/datos.o $(OBJ)/main.o
 	$(CXX)  $(OBJ)/main.o $(OBJ)/clasificador.o $(OBJ)/Genetico.o $(OBJ)/generador.o $(OBJ)/datos.o $(OBJ)/temporizador.o -o $(BIN)/Genetico
 
+$(BIN)/Memetico: $(OBJ)/main_Gene.o $(OBJ)/Memetico.o $(OBJ)/temporizador.o $(OBJ)/datos.o
+	$(CXX) $(OBJ)/main_Gene.o $(OBJ)/Memetico.o $(OBJ)/temporizador.o $(OBJ)/datos.o -o $(BIN)/Memetico
 # ************ Creacion de Objetos ************
 
 $(OBJ)/main.o: $(SRC)/main_AG.cpp $(INC)/temporizador.h $(INC)/generador.h $(INC)/datos.h $(INC)/AGG.h
@@ -45,6 +47,9 @@ $(OBJ)/temporizador.o: $(SRC)/temporizador.cpp $(INC)/temporizador.h
 
 $(OBJ)/Genetico.o: $(SRC)/AGG.cpp $(INC)/AGG.h
 	$(CXX) $(CPPFLAGS) $(SRC)/AGG.cpp -o $(OBJ)/Genetico.o
+
+$(OBJ)/main_Gene.o: $(SRC)/main_Meme.cpp $(INC)/temporizador.h $(INC)/generador.h $(INC)/datos.h $(INC)/Memetico.h
+	$(CXX) $(CPPFLAGS) $(SRC)/main_Meme.cpp -o $(OBJ)/main_Gene.o
 
 # ************ Limpieza ************
 

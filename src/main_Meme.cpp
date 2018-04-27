@@ -1,5 +1,5 @@
 # include <iostream>
-# include "AGG.h"
+# include "Memetico.h"
 # include <vector>
 # include "generador.h"
 # include "datos.h"
@@ -22,7 +22,7 @@ int main(){
 
   cout << "------------------------------------------------" << endl;
   cout << "                   INICIO                       " << endl;
-  AGE genetic(conjuntoDatos.getParticionTrain(1),conjuntoDatos.getParticionTest(1),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+  Memetico genetic(conjuntoDatos.getParticionTrain(1),conjuntoDatos.getParticionTest(1),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
   genetic.initialize();
   genetic.OrdenateValue();
   cout << "------------------------------------------------" << endl;
@@ -41,32 +41,13 @@ int main(){
       End = true;
     }
 
+    if((i%10) == 0){
+      genetic.BL_to_Best();
+    }
+
   }
 
   cout << "\n\nEl valor devuelto es " << (*genetic.getBest()) << endl;
 
-  //for(vector<especimen>::iterator it = result.begin(); it != result.end(); it++){
-  //  cout << endl << (*it);
-  //}
-/*
-  vector<float> pesos(conjuntoDatos.getTamAtributos(), 1.0);
-  float tasa;
-
-  for(int i = 0; i < 5; ++i){
-    Temporizador temp;
-    cout << "----------------------------------------------" << endl;
-    cout << "Comienzo del procesamiento de la" << endl << "particion " << i+1 << ":" << endl;
-    temp.start();
-    tasa = KNN(conjuntoDatos.getParticionTrain(i+1), conjuntoDatos.getParticionTest(i+1), conjuntoDatos.getDatos(), conjuntoDatos.getEtiquetas(), pesos);
-    temp.stop();
-    tMedio += temp.getTime();
-    tasaMedia += tasa;
-    cout << "\tPorcentaje Acierto: " << tasa << "%" << endl;
-    cout << "\tTiempo Ejecucion: " << temp.getTime() << " seg." << endl;
-    cout << "\tTasa Reduccion: 0%" << endl;
-    cout << "\tAgregacion: " << (float)0.5 * (float)tasa << " % " << endl;
-
-  }
-*/
 
 }

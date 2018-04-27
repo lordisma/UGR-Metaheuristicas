@@ -66,7 +66,7 @@ public:
 		 const vector<int> &vectorLabel);
 
 	//virtual void reemplazar(vector<especimen> new_population);
-    vector<especimen>::iterator Torneo(vector<especimen>::iterator p1, vector<especimen>::iterator p2);
+  vector<especimen>::iterator Torneo(vector<especimen>::iterator p1, vector<especimen>::iterator p2);
 	void Mutate();
 	pair<especimen,especimen> Crossover(vector<especimen>::iterator padre, vector<especimen>::iterator madre);
 	void initialize();
@@ -88,9 +88,10 @@ public:
 	vector<especimen>::iterator getBest();
 };
 
-class AGE: private AG{
+class AGE: public AG{
 private:
 
+vector<especimen>::iterator the_second_worst;
 public:
 	AGE();
 	AGE( const vector<int> &train,
@@ -101,6 +102,7 @@ public:
 	vector<especimen> Selection();
 	void Reemplazar();
 	vector<especimen>::iterator getBest();
+	void Find_Dirty(vector<especimen>::iterator &w1,vector<especimen>::iterator &w2);
 };
 
 
