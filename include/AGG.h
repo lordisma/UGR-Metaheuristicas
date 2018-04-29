@@ -69,6 +69,7 @@ public:
   vector<especimen>::iterator Torneo(vector<especimen>::iterator p1, vector<especimen>::iterator p2);
 	void Mutate();
 	pair<especimen,especimen> Crossover(vector<especimen>::iterator padre, vector<especimen>::iterator madre);
+	pair<especimen,especimen> BLX(vector<especimen>::iterator padre, vector<especimen>::iterator madre);
 	void initialize();
 	void OrdenateValue();
 };

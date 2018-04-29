@@ -14,7 +14,7 @@ void neighboursGeneration(vector<float> &weights, const int &component){
 	}
 }
 
-void LocalSearch(const vector<int> &train, const vector<vector<float>> matrixData, const vector<int> vectorLabel, const int &generatedNeighbours, vector<float> &weights){
+void LocalSearch(const vector<int> &train, const vector<vector<float>> matrixData, const vector<int> vectorLabel, const int &generatedNeighbours, vector<float> &weights, int iterations){
 	int neighbours = 0, evaluations = 0, weightsSize = weights.size();
 	bool improvement = false;
 	vector<int> index(weightsSize, 0);
@@ -22,7 +22,7 @@ void LocalSearch(const vector<int> &train, const vector<vector<float>> matrixDat
 	vector<float> actualSolW(weights.begin(), weights.end()), newSolW(weights.begin(), weights.end());
 	float actualSol = -999999, newSol = -999999;
 	actualSol = KNN(train, train, matrixData, vectorLabel, actualSolW, 0.2);
-	while(evaluations < 15000 && neighbours < generatedNeighbours){
+	while(evaluations < iterations && neighbours < generatedNeighbours){
 		random_shuffle(index.begin(), index.end());
 		improvement = false;
 		for(int i = 0; i < weightsSize && !improvement; ++i){

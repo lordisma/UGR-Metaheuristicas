@@ -2,13 +2,14 @@
 
 #define PER_BEST 0.1
 #define PER_RAND 0.1
+#define MAX_ITER 1000
 
 Memetico::Memetico(){}
 
 Memetico::Memetico(const vector<int> &train,
    const vector<int> &test,
    const vector<vector<float>> &matrixData,
-   const vector<int> &vectorLabel):AG(train,test,matrixData,vectorLabel){}
+   const vector<int> &vectorLabel):AGG(train,test,matrixData,vectorLabel){}
 
 void Memetico::BL_to_best(){
   int discriminante = ceil( PER_BEST * TAM_POPULATION );
@@ -16,7 +17,7 @@ void Memetico::BL_to_best(){
 
   for(unsigned int i = 0; i < TAM_POPULATION; i++){
     if( population[i].n_e >= limite){
-      LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[i].Genes);
+      LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[i].Genes,MAX_ITER);
       population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[i].Genes,0.2);
     }
   }
@@ -29,7 +30,7 @@ void Memetico::BL_to_rand(){
   int pointer     = Randint(0,TAM_POPULATION-1);
 
   for(unsigned int i = 0; i < tamToChange; i++){
-      LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[pointer].Genes);
+      LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[pointer].Genes,MAX_ITER);
       pointer = pointer + 1;
       pointer = pointer % TAM_POPULATION;
       population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[pointer].Genes,0.2);
@@ -40,7 +41,7 @@ void Memetico::BL_to_rand(){
 
 void Memetico::BL_to_All(){
   for(unsigned int i = 0; i < TAM_POPULATION; i++){
-    LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[i].Genes);
+    LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[i].Genes,MAX_ITER);
     population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[i].Genes,0.2);
   }
   OrdenateValue();

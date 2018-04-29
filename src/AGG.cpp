@@ -54,19 +54,19 @@ void AG::Mutate(){//Tira un random y con este lo haces todo
   unsigned int sizeToChange   = ceil(PMUTATION* (float)TAM_POPULATION)-1;
   unsigned int currentPoint     = ceil(aleatorio * (TAM_POPULATION-1));
 
-  cout << "Valor de size to change " << sizeToChange <<"  valor real "<< PMUTATION* (float)TAM_POPULATION <<endl;
-  cout << "Valor de Punto " << currentPoint <<"  valor real "<< aleatorio * (TAM_POPULATION-1) <<endl;
+  //cout << "Valor de size to change " << sizeToChange <<"  valor real "<< PMUTATION* (float)TAM_POPULATION <<endl;
+  //cout << "Valor de Punto " << currentPoint <<"  valor real "<< aleatorio * (TAM_POPULATION-1) <<endl;
   if(sizeToChange < 1){
-    cout << "\nEl valor de size to change es pequeño para la poblacion " << sizeToChange;
+    //cout << "\nEl valor de size to change es pequeño para la poblacion " << sizeToChange;
     if(aleatorio < PMUTATION){
       sizeToChange = 1;
-      cout << "\nSe ha decidido mutar";
+      //cout << "\nSe ha decidido mutar";
     }
   }
 
   //cout << "\nNumero de caracteristica:" <<numberOfCharac<< endl;
   while(sizeToChange > 0){
-    cout << "MIEMBRO ELEGIDO: " << currentPoint << endl;
+    //cout << "MIEMBRO ELEGIDO: " << currentPoint << endl;
     //cout << population[currentPoint];
     //cout << "\nMiembro a cambiar: " << currentPoint << "/" << population.size();
     //cout << "\nValor del gen: " << population[currentPoint].Genes[characToChange] << endl;
@@ -91,8 +91,8 @@ void AG::Mutate(){//Tira un random y con este lo haces todo
 *@brief Inicializador de la poblacion
 ********************************/
 void AG::initialize(){
-  cout << "\nNumero de caracteristicas: " << numberOfCharac << endl;
-  cout << "\nTamano de la matrix: (" << dataMatrix[0].size() << "," << realLabels.size() << ")" << endl;
+  //cout << "\nNumero de caracteristicas: " << numberOfCharac << endl;
+  //cout << "\nTamano de la matrix: (" << dataMatrix[0].size() << "," << realLabels.size() << ")" << endl;
 
   for(unsigned int i= 0; i < TAM_POPULATION; i++){
     vector<float> Gen;
@@ -153,6 +153,7 @@ pair<especimen,especimen> AG::Crossover (vector<especimen>::iterator padre, vect
 pair<especimen,especimen> AG::BLX (vector<especimen>::iterator padre, vector<especimen>::iterator madre){
   pair<especimen,especimen> result;
   especimen Hijo1,Hijo2;
+  float max,min;
   float dif;
   float sig = 0.3;
   float random = Rand();

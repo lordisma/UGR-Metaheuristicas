@@ -265,7 +265,7 @@ int main(int argc, char* argv[]){
 				cout << "----------------------------------------------" << endl;
 				cout << "Comienzo del procesamiento de la" << endl << "particion " << i+1 << ":" << endl;
 				temp.start();
-				LocalSearch(conjuntoDatos.getParticionTrain(i+1), conjuntoDatos.getDatos(), conjuntoDatos.getEtiquetas(), vecinosGenerados, pesosAux);
+				LocalSearch(conjuntoDatos.getParticionTrain(i+1), conjuntoDatos.getDatos(), conjuntoDatos.getEtiquetas(), vecinosGenerados, pesosAux, 15000);
 				temp.stop();
 				tasa = KNN(conjuntoDatos.getParticionTrain(i+1), conjuntoDatos.getParticionTest(i+1), conjuntoDatos.getDatos(), conjuntoDatos.getEtiquetas(), pesosAux, 0.2);
 				tMedio += temp.getTime();
