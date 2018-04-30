@@ -3,13 +3,25 @@ INC = include
 OBJ = obj
 SOL = sol
 SRC = src
+LIB = lib
+
+ARCH = $(shell getconf LONG_BIT)
+ifeq ($(ARCH), 32)
+  LIBPATH = $(LIB)/lib
+else
+  LIBPATH = $(LIB)/lib64
+endif
 
 CXX = g++
 CPPFLAGS = -O3 -g -c -std=c++11 -I$(INC)
+XLSFLAGS = -std=c++11 -I $(LIB)/include_cpp -L $(LIBPATH) -lxl -Wl,-rpath,$(LIBPATH)
 
 # ************ Compilacion de los Programas ************
 
-all: $(BIN)/ClasificadorKNN $(BIN)/Genetico $(BIN)/Memetico
+all: $(BIN)/ClasificadorKNN $(BIN)/Genetico $(BIN)/Memetico $(BIN)/XLSparser
+
+$(BIN)/XLSparser: $(SRC)/xlsparser.cpp
+	$(CXX) -o $(BIN)/XLSparser $(SRC)/xlsparser.cpp $(XLSFLAGS)
 
 $(BIN)/ClasificadorKNN: $(OBJ)/clasificadorknn.o $(OBJ)/clasificador.o $(OBJ)/datos.o $(OBJ)/generador.o $(OBJ)/localsearch.o $(OBJ)/relief.o $(OBJ)/temporizador.o
 	$(CXX) $(OBJ)/clasificadorknn.o $(OBJ)/clasificador.o $(OBJ)/datos.o $(OBJ)/generador.o $(OBJ)/localsearch.o $(OBJ)/relief.o $(OBJ)/temporizador.o -o $(BIN)/ClasificadorKNN
@@ -58,4 +70,4 @@ $(OBJ)/Memetico.o: $(SRC)/Memetico.cpp $(INC)/Memetico.h $(INC)/AGG.h
 
 clean:
 	$(info "Limpiando...")
-	rm -f $(OBJ)/* $(BIN)/* $(SOL)/*
+	rm -f $(OBJ)/* $(BIN)/* $(SOL)/*.txt

@@ -108,7 +108,7 @@ void AG::initialize(){
     //cout << "\n\tNUEVO ESPECIMEN\n" << nuevo;
   }
 
-  cout << "\nTamaño de la poblacion: " << population.size() << endl;
+  //cout << "\nTamaño de la poblacion: " << population.size() << endl;
 }
 /*******************************
 *@brief Operador de cruze para el problema con

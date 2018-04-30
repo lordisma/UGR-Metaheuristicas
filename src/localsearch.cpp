@@ -1,4 +1,5 @@
 #include <localsearch.h>
+#include <iostream>
 
 using namespace std;
 
@@ -37,5 +38,6 @@ void LocalSearch(const vector<int> &train, const vector<vector<float>> matrixDat
 			}
 		}
 	}
+	//cout << endl << "Numero de iteraciones de la BL: " << evaluations << endl;
 	weights = actualSolW;
 }

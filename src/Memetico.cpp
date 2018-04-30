@@ -2,7 +2,7 @@
 
 #define PER_BEST 0.1
 #define PER_RAND 0.1
-#define MAX_ITER 1000
+#define MAX_ITER 10
 
 Memetico::Memetico(){}
 

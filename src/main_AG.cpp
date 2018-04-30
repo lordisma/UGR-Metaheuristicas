@@ -14,17 +14,22 @@ int main(int argc, char* argv[]){
   Datos conjuntoDatos;
   vector<especimen> Selected_especimen;
   bool End = false;
-  unsigned int data_number;
+  unsigned int data_number, kind_genetic;
 
-  if(argc != 2){
+  if(argc != 3){
     return 1;
   }else{
     data_number = stoi(argv[1]);
-    cout << data_number<< endl;
+    kind_genetic= stoi(argv[2]);
   }
+
+  cout << "----------------------------------------------" << endl;
+  cout << "Semilla Escogida: " << semilla << endl;
 
   switch(data_number){
     case 1:{
+      cout << "----------------------------------------------" << endl;
+      cout << "Archivo de Datos: Ozone" << endl;
       cout << "----------------------------------------------" << endl;
       cout << "Leyendo, normalizando y particionando datos Ozone..." << endl;
       conjuntoDatos.leerDatos("../data/ozone-320.arff");
@@ -33,12 +38,16 @@ int main(int argc, char* argv[]){
     }
     case 2:{
       cout << "----------------------------------------------" << endl;
+      cout << "Archivo de Datos: Parkisons" << endl;
+      cout << "----------------------------------------------" << endl;
       cout << "Leyendo, normalizando y particionando datos Parkinsons..." << endl;
       conjuntoDatos.leerDatos("../data/parkinsons.arff");
       file_name = "Parkinsons";
       break;
     }
     case 3:{
+      cout << "----------------------------------------------" << endl;
+      cout << "Archivo de Datos: Spectf-Heart" << endl;
       cout << "----------------------------------------------" << endl;
       cout << "Leyendo, normalizando y particionando datos Spectf-Heart..." << endl;
       conjuntoDatos.leerDatos("../data/spectf-heart.arff");
@@ -54,52 +63,104 @@ int main(int argc, char* argv[]){
 float  tasa = 0.0;
 int pesosDescartados = 0;
 
+if (kind_genetic == 1){
+  cout << "----------------------------------------------" << endl;
+  cout << "Algoritmo: Genetico Generacional" << endl;
 
-for(unsigned int j = 0; j < 5; j++){
-  Temporizador temp;
-  cout << "------------------------------------------------" << endl;
-  cout << "                   INICIO                       " << endl;
-  AGG genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
-  genetic.initialize();
-  genetic.OrdenateValue();
-  cout << "------------------------------------------------" << endl;
-  cout << "               GEN GENERACIONAL                 " << endl;
+  for(unsigned int j = 0; j < 5; j++){
+    End = false;
+    Temporizador temp;
+    cout << "----------------------------------------------" << endl;
+    cout << "Comienzo del procesamiento de la" << endl;
+    cout << "particion " << j+1 << ":" << endl;
+    AGG genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+    genetic.initialize();
+    genetic.OrdenateValue();
 
-  temp.start();
-  //cout << "Miembros de las seleccionados" << endl;
-  for(unsigned int i = 0; i < 15000 && !End; i++){
-    //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
-    genetic.Reemplazar();
-    genetic.Mutate();
-    if(KNN( conjuntoDatos.getParticionTrain(j),
-            conjuntoDatos.getParticionTest(j),
-            conjuntoDatos.getDatos(),
-            conjuntoDatos.getEtiquetas(),
-            (*genetic.getBest()).Genes,   0.2) > 90){
-      End = true;
+    temp.start();
+    //cout << "Miembros de las seleccionados" << endl;
+    for(unsigned int i = 0; i < 15000 && !End; i++){
+      //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
+      genetic.Reemplazar();
+      genetic.Mutate();
+      if(KNN( conjuntoDatos.getParticionTrain(j),
+              conjuntoDatos.getParticionTest(j),
+              conjuntoDatos.getDatos(),
+              conjuntoDatos.getEtiquetas(),
+              (*genetic.getBest()).Genes,   0.2) > 90){
+        End = true;
+      }
+
+    }
+    temp.stop();
+    tasa = (*genetic.getBest()).Perf;
+    tasaMedia += tasa;
+    tMedio += temp.getTime();
+    pesosDescartados = 0;
+
+    for(unsigned int t = 0; t < (*genetic.getBest()).Genes.size(); t++){
+      if ((*genetic.getBest()).Genes[t] < 0.2)
+        pesosDescartados ++;
     }
 
+    double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(*genetic.getBest()).Genes.size());
+    cout << "\tPorcentaje Acierto: " << tasa << "%" << endl;
+    cout << "\tTiempo Ejecucion: " << temp.getTime() << " seg." << endl;
+    cout << "\tTasa Reduccion: " << tasaReduccion << "%" << endl;
+    cout << "\tAgregacion: " << (float)0.5 * (float)tasa + (float)0.5 * (float)tasaReduccion << " % " << endl;
+
   }
-  temp.stop();
-  tasa = (*genetic.getBest()).Perf;
-  tasaMedia += tasa;
-  tMedio += temp.getTime();
-  pesosDescartados = 0;
+}else{
+  cout << "----------------------------------------------" << endl;
+  cout << "Algoritmo: Genetico Generacional" << endl;
 
-  for(unsigned int t = 0; t < (*genetic.getBest()).Genes.size(); t++){
-    if ((*genetic.getBest()).Genes[t] < 0.2)
-      pesosDescartados ++;
+  for(unsigned int j = 0; j < 5; j++){
+    End = false;
+    Temporizador temp;
+    cout << "----------------------------------------------" << endl;
+    cout << "Comienzo del procesamiento de la" << endl;
+    cout << "particion " << j << ":" << endl;
+    AGE genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+    genetic.initialize();
+    genetic.OrdenateValue();
+
+    temp.start();
+    //cout << "Miembros de las seleccionados" << endl;
+    for(unsigned int i = 0; i < 15000 && !End; i++){
+      //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
+      genetic.Reemplazar();
+      genetic.Mutate();
+      if(KNN( conjuntoDatos.getParticionTrain(j),
+              conjuntoDatos.getParticionTest(j),
+              conjuntoDatos.getDatos(),
+              conjuntoDatos.getEtiquetas(),
+              (*genetic.getBest()).Genes,   0.2) > 90){
+        End = true;
+      }
+
+    }
+    temp.stop();
+    tasa = (*genetic.getBest()).Perf;
+    tasaMedia += tasa;
+    tMedio += temp.getTime();
+    pesosDescartados = 0;
+
+    for(unsigned int t = 0; t < (*genetic.getBest()).Genes.size(); t++){
+      if ((*genetic.getBest()).Genes[t] < 0.2)
+        pesosDescartados ++;
+    }
+
+    double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(*genetic.getBest()).Genes.size());
+    cout << "\tPorcentaje Acierto: " << tasa << "%" << endl;
+    cout << "\tTiempo Ejecucion: " << temp.getTime() << " seg." << endl;
+    cout << "\tTasa Reduccion: " << tasaReduccion << "%" << endl;
+    cout << "\tAgregacion: " << (float)0.5 * (float)tasa + (float)0.5 * (float)tasaReduccion << " % " << endl;
+
   }
-
-  double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(*genetic.getBest()).Genes.size());
-  cout << "\tPorcentaje Acierto: " << tasa << "%" << endl;
-  cout << "\tTiempo Ejecucion: " << temp.getTime() << " seg." << endl;
-  cout << "\tTasa Reduccion: " << tasaReduccion << "%" << endl;
-  cout << "\tAgregacion: " << (float)0.5 * (float)tasa + (float)0.5 * (float)tasaReduccion << " % " << endl;
-
 }
-
-cout << endl << "ACIERTO MEDIO: " << tasaMedia/5 << endl;
-cout << "TIEMPO MEDIO: " << tMedio/5 << endl;
+cout << "----------------------------------------------" << endl;
+cout << "----------------------------------------------" << endl;
+cout << "Porcentaje Medio de Acierto: " << tasaMedia/5 << endl;
+cout << "Tiempo Medio de Ejecucion: " << tMedio/5 << endl;
 
 }
