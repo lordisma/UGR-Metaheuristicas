@@ -31,13 +31,6 @@ typedef struct {
    int n_e;
 } especimen;
 
-/* the best structures are saved in the following record */
-typedef struct {
-	vector<short int> Gene;
-	float Perf;
-	int Gen;
-	int Trials;
-} mejor_ejemplar;
 
 
 bool operator > (especimen p1, especimen p2);
@@ -72,6 +65,8 @@ public:
 	pair<especimen,especimen> BLX(vector<especimen>::iterator padre, vector<especimen>::iterator madre);
 	void initialize();
 	void OrdenateValue();
+	float value(vector<float> nuevo);
+
 };
 
 class AGG: public AG{
@@ -86,7 +81,7 @@ public:
 
 	vector<especimen> Selection();
 	void Reemplazar();
-	vector<especimen>::iterator getBest();
+	especimen getBest();
 };
 
 class AGE: public AG{
@@ -102,7 +97,7 @@ public:
 
 	vector<especimen> Selection();
 	void Reemplazar();
-	vector<especimen>::iterator getBest();
+	especimen getBest();
 	void Find_Dirty(vector<especimen>::iterator &w1,vector<especimen>::iterator &w2);
 };
 

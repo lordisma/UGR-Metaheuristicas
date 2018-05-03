@@ -9,7 +9,7 @@
 int main(int argc, char* argv[]){
   float tMedio = 0.0, tasaMedia = 0.0;
   string file_name = "";
-  unsigned long semilla = 20000913;
+  unsigned long semilla = 50627728;
   Set_random(semilla);
   Datos conjuntoDatos;
   vector<especimen> Selected_especimen;
@@ -81,29 +81,35 @@ if (kind_genetic == 1){
     //cout << "Miembros de las seleccionados" << endl;
     for(unsigned int i = 0; i < 15000 && !End; i++){
       //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
+      //cout << endl << "El valor en la iteracion " << i << " es " << (genetic.getBest()).Perf;
       genetic.Reemplazar();
+      //cout << "\nIntento de mutacion";
       genetic.Mutate();
-      if(KNN( conjuntoDatos.getParticionTrain(j),
-              conjuntoDatos.getParticionTest(j),
-              conjuntoDatos.getDatos(),
-              conjuntoDatos.getEtiquetas(),
-              (*genetic.getBest()).Genes,   0.2) > 90){
+      //genetic.OrdenateValue();
+      if( (genetic.getBest()).Perf > 90){
         End = true;
       }
+      //cout << "\nFin iteracion";
 
     }
+
     temp.stop();
-    tasa = (*genetic.getBest()).Perf;
+    //tasa = (*genetic.getBest()).Perf;
+    tasa = KNN( conjuntoDatos.getParticionTrain(j),
+            conjuntoDatos.getParticionTest(j),
+            conjuntoDatos.getDatos(),
+            conjuntoDatos.getEtiquetas(),
+            (genetic.getBest()).Genes,   0.2);
     tasaMedia += tasa;
     tMedio += temp.getTime();
     pesosDescartados = 0;
 
-    for(unsigned int t = 0; t < (*genetic.getBest()).Genes.size(); t++){
-      if ((*genetic.getBest()).Genes[t] < 0.2)
+    for(unsigned int t = 0; t < (genetic.getBest()).Genes.size(); t++){
+      if ((genetic.getBest()).Genes[t] < 0.2)
         pesosDescartados ++;
     }
 
-    double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(*genetic.getBest()).Genes.size());
+    double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(genetic.getBest()).Genes.size());
     cout << "\tPorcentaje Acierto: " << tasa << "%" << endl;
     cout << "\tTiempo Ejecucion: " << temp.getTime() << " seg." << endl;
     cout << "\tTasa Reduccion: " << tasaReduccion << "%" << endl;
@@ -112,14 +118,14 @@ if (kind_genetic == 1){
   }
 }else{
   cout << "----------------------------------------------" << endl;
-  cout << "Algoritmo: Genetico Generacional" << endl;
+  cout << "Algoritmo: Genetico Estacional" << endl;
 
   for(unsigned int j = 0; j < 5; j++){
     End = false;
     Temporizador temp;
     cout << "----------------------------------------------" << endl;
     cout << "Comienzo del procesamiento de la" << endl;
-    cout << "particion " << j << ":" << endl;
+    cout << "particion " << j + 1 << ":" << endl;
     AGE genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
     genetic.initialize();
     genetic.OrdenateValue();
@@ -130,27 +136,29 @@ if (kind_genetic == 1){
       //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
       genetic.Reemplazar();
       genetic.Mutate();
-      if(KNN( conjuntoDatos.getParticionTrain(j),
-              conjuntoDatos.getParticionTest(j),
-              conjuntoDatos.getDatos(),
-              conjuntoDatos.getEtiquetas(),
-              (*genetic.getBest()).Genes,   0.2) > 90){
+    //  cout << endl << (genetic.getBest()).Perf << endl;
+      if( (genetic.getBest()).Perf > 90){
         End = true;
       }
 
     }
     temp.stop();
-    tasa = (*genetic.getBest()).Perf;
+    //tasa = (*genetic.getBest()).Perf;
+    tasa = KNN( conjuntoDatos.getParticionTrain(j),
+            conjuntoDatos.getParticionTest(j),
+            conjuntoDatos.getDatos(),
+            conjuntoDatos.getEtiquetas(),
+            (genetic.getBest()).Genes,   0.2);
     tasaMedia += tasa;
     tMedio += temp.getTime();
     pesosDescartados = 0;
 
-    for(unsigned int t = 0; t < (*genetic.getBest()).Genes.size(); t++){
-      if ((*genetic.getBest()).Genes[t] < 0.2)
+    for(unsigned int t = 0; t < (genetic.getBest()).Genes.size(); t++){
+      if ((genetic.getBest()).Genes[t] < 0.2)
         pesosDescartados ++;
     }
 
-    double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(*genetic.getBest()).Genes.size());
+    double tasaReduccion = (float)100.0 * ((float)pesosDescartados/(float)(genetic.getBest()).Genes.size());
     cout << "\tPorcentaje Acierto: " << tasa << "%" << endl;
     cout << "\tTiempo Ejecucion: " << temp.getTime() << " seg." << endl;
     cout << "\tTasa Reduccion: " << tasaReduccion << "%" << endl;

@@ -41,6 +41,28 @@ vector<especimen>::iterator AG::Torneo(vector<especimen>::iterator p1, vector<es
   return p2;
 }
 
+/********************************
+*@brief Funcion de Evaluacion
+
+*********************************/
+
+float AG::value(vector<float> nuevo){
+  float prediction = KNN( trainData, testData, dataMatrix, realLabels, nuevo,   0.2);
+
+  //cout << "\ndentro de value es: " << nuevo;
+
+  int pesosDescartados = 0;
+
+  for(unsigned int t = 0; t < numberOfCharac; t++){
+    if (nuevo[t] < 0.2)
+      pesosDescartados ++;
+  }
+
+  if ((float)pesosDescartados >= ((float)numberOfCharac * 0.97))
+    return 0.0;
+
+  return 0.5 * prediction + 0.5 * (100.0 * ((float)pesosDescartados / (float) numberOfCharac));
+}
 /*******************************
 *@brief Funcion de mutacion de los especimenes
 *       muta los individuos de la poblacion
@@ -49,43 +71,31 @@ vector<especimen>::iterator AG::Torneo(vector<especimen>::iterator p1, vector<es
 ********************************/
 void AG::Mutate(){//Tira un random y con este lo haces todo
   float        aleatorio      = Rand();
-  unsigned int characToChange = Randint(0,numberOfCharac);
+  unsigned int characToChange = Randint(0,numberOfCharac-1);
   float        alteration     = (aleatorio * 2) - 1; //Rango de valores entre [-1,1]
-  unsigned int sizeToChange   = ceil(PMUTATION* (float)TAM_POPULATION)-1;
-  unsigned int currentPoint     = ceil(aleatorio * (TAM_POPULATION-1));
+  //unsigned int sizeToChange   = ceil(PMUTATION* (float)TAM_POPULATION)-1;
+  unsigned int currentPoint   = Randint(0,population.size()-1);
 
-  //cout << "Valor de size to change " << sizeToChange <<"  valor real "<< PMUTATION* (float)TAM_POPULATION <<endl;
-  //cout << "Valor de Punto " << currentPoint <<"  valor real "<< aleatorio * (TAM_POPULATION-1) <<endl;
-  if(sizeToChange < 1){
-    //cout << "\nEl valor de size to change es pequeño para la poblacion " << sizeToChange;
+
+  //cout << "\El numero de caracteristica es de" << numberOfCharac << " y el valor elegido es el " << characToChange;
+
+
     if(aleatorio < PMUTATION){
-      sizeToChange = 1;
-      //cout << "\nSe ha decidido mutar";
+
+      population[currentPoint].Genes[characToChange] =
+                                population[currentPoint].Genes[characToChange] +
+                                (alteration * population[currentPoint].Genes[characToChange]);
+
+      if(population[currentPoint].Genes[characToChange] > 1)
+        population[currentPoint].Genes[characToChange] = 1.0;
+
+      population[currentPoint].Perf = value(population[currentPoint].Genes);
+
+
     }
-  }
 
-  //cout << "\nNumero de caracteristica:" <<numberOfCharac<< endl;
-  while(sizeToChange > 0){
-    //cout << "MIEMBRO ELEGIDO: " << currentPoint << endl;
-    //cout << population[currentPoint];
-    //cout << "\nMiembro a cambiar: " << currentPoint << "/" << population.size();
-    //cout << "\nValor del gen: " << population[currentPoint].Genes[characToChange] << endl;
-    population[currentPoint].Genes[characToChange] =
-                              population[currentPoint].Genes[characToChange] +
-                              (alteration * population[currentPoint].Genes[characToChange]);
 
-    if(population[currentPoint].Genes[characToChange] > 1)
-      population[currentPoint].Genes[characToChange] = 1.0;
-
-    population[currentPoint].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[currentPoint].Genes,0.2);
-    //cout << "\nValor cambiado: " << population[currentPoint].Genes[characToChange] << endl;
-    //cout<< "\nLa variable "<< characToChange<<" Cambiado a: \n" << population[currentPoint];
-    sizeToChange--;
-    //cout << "\nValor de characToChange: " << characToChange << "  characToChange++:"<<characToChange+1;
-    characToChange = (characToChange+1) % numberOfCharac;
-    //cout << " \nValor tras el cambio: " << population[currentPoint].Perf;
-    currentPoint = (currentPoint+1) % TAM_POPULATION;
-  }
+//  OrdenateValue();
 }
 /*******************************
 *@brief Inicializador de la poblacion
@@ -101,7 +111,8 @@ void AG::initialize(){
     }
     especimen nuevo ;
     nuevo.Genes = Gen;
-    nuevo.Perf  = KNN(trainData,testData,dataMatrix,realLabels,Gen,0.2);//Esta linea hay que cambiarla y añaidir el KNN
+  //  nuevo.Perf  = KNN(trainData,testData,dataMatrix,realLabels,Gen,0.2);//Esta linea hay que cambiarla y añaidir el KNN
+    nuevo.Perf  = value(Gen);//Esta linea hay que cambiarla y añaidir el KNN
     nuevo.n_e   = 0;
 
     population.push_back(nuevo);
@@ -123,6 +134,8 @@ pair<especimen,especimen> AG::Crossover (vector<especimen>::iterator padre, vect
   float hijo_1_result, hijo_2_result;
   float dif;
   //Cruze BLX con sigma = 0.3
+  Hijo1.n_e = 0;
+  Hijo2.n_e = 0;
 
   for(unsigned int i = 0; i < numberOfCharac; i++){
       if((*padre).Genes[i]>=(*madre).Genes[i]){
@@ -141,8 +154,10 @@ pair<especimen,especimen> AG::Crossover (vector<especimen>::iterator padre, vect
       Hijo1.Genes.push_back(hijo_1_result);
       Hijo2.Genes.push_back(hijo_2_result);
   }
-  Hijo1.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo1.Genes,0.2); //Linea a cambiar
-  Hijo2.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo2.Genes,0.2); //Linea a cambiar
+  //Hijo1.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo1.Genes,0.2); //Linea a cambiar
+  //Hijo2.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo2.Genes,0.2); //Linea a cambiar
+  Hijo1.Perf = value(Hijo1.Genes); //Linea a cambiar
+  Hijo2.Perf = value(Hijo2.Genes); //Linea a cambiar
 
   result = make_pair(Hijo1,Hijo2);
   return result;
@@ -160,6 +175,9 @@ pair<especimen,especimen> AG::BLX (vector<especimen>::iterator padre, vector<esp
   float hijo_1_result,hijo_2_result;
   //Cruze BLX con sigma = 0.3
 
+  Hijo1.n_e =0;
+  Hijo2.n_e =0;
+
   for(unsigned int i = 0; i < numberOfCharac; i++){
       if((*padre).Genes[i]>=(*madre).Genes[i]){
         max = (*padre).Genes[i];
@@ -173,13 +191,23 @@ pair<especimen,especimen> AG::BLX (vector<especimen>::iterator padre, vector<esp
       dif = (max + sig*dif) - (min - sig*dif);
 
       hijo_1_result = min + (dif*random);
-      hijo_2_result = min + (dif*1-random);
+      hijo_2_result = min + (dif*(1-random));
+
+      if(hijo_1_result > 1.0){
+        hijo_1_result = 1.0;
+      }
+      if(hijo_2_result > 1.0){
+        hijo_2_result = 1.0;
+      }
+
 
       Hijo1.Genes.push_back(hijo_1_result);
       Hijo2.Genes.push_back(hijo_2_result);
   }
-  Hijo1.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo1.Genes,0.2); //Linea a cambiar
-  Hijo2.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo2.Genes,0.2); //Linea a cambiar
+  //Hijo1.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo1.Genes,0.2); //Linea a cambiar
+  //Hijo2.Perf = KNN(trainData,testData,dataMatrix,realLabels,Hijo2.Genes,0.2); //Linea a cambiar
+  Hijo1.Perf = value(Hijo1.Genes); //Linea a cambiar
+  Hijo2.Perf = value(Hijo2.Genes);
 
   result = make_pair(Hijo1,Hijo2);
   return result;
@@ -192,8 +220,8 @@ void AG::OrdenateValue(){
   int best;
   float perf;
 
-  for (unsigned int i=0;i<TAM_POPULATION;i++)
-    population[i].n_e=0;
+  for (unsigned int a=0;a<TAM_POPULATION;a++)
+    population[a].n_e=0;
 
 
   for(unsigned int i = 0; i < TAM_POPULATION; i++){
@@ -271,12 +299,13 @@ void AGG::Reemplazar(){
   vector<especimen>::iterator it= population.begin();
   for(unsigned int i = 0; i < population.size()-3; i=i+4){
     vector<especimen>::iterator p1=it,p2=it+1,p3=it+2,p4=it+3;
-    pair<especimen,especimen> hijos = Crossover(Torneo(p1,p2),Torneo(p3,p4));
+    pair<especimen,especimen> hijos = BLX(Torneo(p1,p2),Torneo(p3,p4));
     result.push_back(hijos.first);
     result.push_back(hijos.second);
     it = it + 4;
   }
 
+  //cout << endl << population.size() << "   " << result.size();
   population = result;
   OrdenateValue();
   (*the_worst) = predecesor;
@@ -284,8 +313,8 @@ void AGG::Reemplazar(){
 
 }
 
-vector<especimen>::iterator AGG::getBest(){
-  return the_best;
+especimen AGG::getBest(){
+  return (*the_best);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -297,8 +326,8 @@ AGE::AGE(
    const vector<vector<float>> &matrixData,
    const vector<int> &vectorLabel):AG(train,test,matrixData,vectorLabel){}
 
-vector<especimen>::iterator AGE::getBest(){
-  return the_best;
+especimen AGE::getBest(){
+  return (*the_best);
 }
 
 vector<especimen> AGE::Selection(){
@@ -353,7 +382,7 @@ void AGE::Reemplazar(){
   Find_Dirty(the_worst,the_second_worst);
   vector<especimen> selected = Selection();
   vector<especimen>::iterator it= selected.begin();
-  pair<especimen,especimen> hijos = Crossover(Torneo(it,it + 1),Torneo(it + 2,it + 4));
+  pair<especimen,especimen> hijos = BLX(Torneo(it,it + 1),Torneo(it + 2,it + 4));
 
   // Nos apoyamos en el orden implicito de los operandos entonces solo hay
   // Tres casos posibles

@@ -18,7 +18,8 @@ void Memetico::BL_to_best(){
   for(unsigned int i = 0; i < TAM_POPULATION; i++){
     if( population[i].n_e >= limite){
       LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[i].Genes,MAX_ITER);
-      population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[i].Genes,0.2);
+      //population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[i].Genes,0.2);
+      population[i].Perf = value(population[i].Genes);
     }
   }
 
@@ -33,7 +34,8 @@ void Memetico::BL_to_rand(){
       LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[pointer].Genes,MAX_ITER);
       pointer = pointer + 1;
       pointer = pointer % TAM_POPULATION;
-      population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[pointer].Genes,0.2);
+      //population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[pointer].Genes,0.2);
+      population[i].Perf = value(population[i].Genes);
   }
 
   OrdenateValue();
@@ -42,7 +44,8 @@ void Memetico::BL_to_rand(){
 void Memetico::BL_to_All(){
   for(unsigned int i = 0; i < TAM_POPULATION; i++){
     LocalSearch(trainData,dataMatrix,realLabels,2*numberOfCharac,population[i].Genes,MAX_ITER);
-    population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[i].Genes,0.2);
+    //population[i].Perf = KNN(trainData,testData,dataMatrix,realLabels,population[i].Genes,0.2);
+    population[i].Perf = value(population[i].Genes);
   }
   OrdenateValue();
 }
