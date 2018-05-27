@@ -66,6 +66,8 @@ public:
 	void initialize();
 	void OrdenateValue();
 	float value(vector<float> nuevo);
+	vector<especimen>::iterator getWorst();
+	float Diferencia();
 
 };
 

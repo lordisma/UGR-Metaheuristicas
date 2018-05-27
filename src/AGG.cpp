@@ -299,7 +299,8 @@ void AGG::Reemplazar(){
   vector<especimen>::iterator it= population.begin();
   for(unsigned int i = 0; i < population.size()-3; i=i+4){
     vector<especimen>::iterator p1=it,p2=it+1,p3=it+2,p4=it+3;
-    pair<especimen,especimen> hijos = BLX(Torneo(p1,p2),Torneo(p3,p4));
+    //pair<especimen,especimen> hijos = BLX(Torneo(p1,p2),Torneo(p3,p4));
+    pair<especimen,especimen> hijos = Crossover(Torneo(p1,p2),Torneo(p3,p4));
     result.push_back(hijos.first);
     result.push_back(hijos.second);
     it = it + 4;
@@ -382,8 +383,8 @@ void AGE::Reemplazar(){
   Find_Dirty(the_worst,the_second_worst);
   vector<especimen> selected = Selection();
   vector<especimen>::iterator it= selected.begin();
-  pair<especimen,especimen> hijos = BLX(Torneo(it,it + 1),Torneo(it + 2,it + 4));
-
+  //pair<especimen,especimen> hijos = BLX(Torneo(it,it + 1),Torneo(it + 2,it + 4));
+    pair<especimen,especimen> hijos = Crossover(Torneo(it,it + 1),Torneo(it + 2,it + 4));
   // Nos apoyamos en el orden implicito de los operandos entonces solo hay
   // Tres casos posibles
   // -Los dos mayores
@@ -408,4 +409,23 @@ void AGE::Reemplazar(){
 
   OrdenateValue();//Podemos cambiarlo para ser mucho mas eficiente
 
+}
+
+vector<especimen>::iterator AG::getWorst(){
+
+  return the_worst;
+}
+
+float AG::Diferencia(){
+  float result = 0.0;
+  float suma_parcial = 0.0;
+  float aux = 0.0;
+
+  for (unsigned int i = 0; i < numberOfCharac; i++) {
+    aux = (*the_best).Genes[i] - (*the_worst).Genes[i];
+    suma_parcial = aux * aux;
+    result += suma_parcial;
+  }
+
+  return sqrt(result);
 }

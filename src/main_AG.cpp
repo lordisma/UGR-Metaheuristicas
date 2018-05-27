@@ -23,8 +23,8 @@ int main(int argc, char* argv[]){
     kind_genetic= stoi(argv[2]);
   }
 
-  cout << "----------------------------------------------" << endl;
-  cout << "Semilla Escogida: " << semilla << endl;
+  //cout << "----------------------------------------------" << endl;
+  //cout << "Semilla Escogida: " << semilla << endl;
 
   switch(data_number){
     case 1:{
@@ -73,9 +73,11 @@ if (kind_genetic == 1){
     cout << "----------------------------------------------" << endl;
     cout << "Comienzo del procesamiento de la" << endl;
     cout << "particion " << j+1 << ":" << endl;
-    AGG genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+    AGG genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTrain(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
     genetic.initialize();
     genetic.OrdenateValue();
+
+    cout << endl;
 
     temp.start();
     //cout << "Miembros de las seleccionados" << endl;
@@ -126,7 +128,7 @@ if (kind_genetic == 1){
     cout << "----------------------------------------------" << endl;
     cout << "Comienzo del procesamiento de la" << endl;
     cout << "particion " << j + 1 << ":" << endl;
-    AGE genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+    AGE genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTrain(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
     genetic.initialize();
     genetic.OrdenateValue();
 

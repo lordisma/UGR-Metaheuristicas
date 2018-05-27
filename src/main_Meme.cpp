@@ -74,7 +74,7 @@ int main(int argc, char* argv[]){
       for(unsigned int j = 0; j < 5; j++){
         End = false;
       Temporizador temp, timefun;
-      Memetico genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+      Memetico genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTrain(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
       genetic.initialize();
       genetic.OrdenateValue();
       cout << "----------------------------------------------" << endl;
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]){
 
       temp.start();
       //cout << "Miembros de las seleccionados" << endl;
-      for(unsigned int i = 0; i < 15000 && !End; i++){
+      for(unsigned int i = 0; i < 1500 && !End; i++){
         //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
         genetic.Reemplazar();
         genetic.Mutate();
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]){
       for(unsigned int j = 0; j < 5; j++){
         End = false;
         Temporizador temp, timefun;
-        Memetico genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+        Memetico genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTrain(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
         genetic.initialize();
         genetic.OrdenateValue();
         cout << "----------------------------------------------" << endl;
@@ -145,7 +145,7 @@ int main(int argc, char* argv[]){
 
         temp.start();
         //cout << "Miembros de las seleccionados" << endl;
-        for(unsigned int i = 0; i < 1500 && !End; i++){
+        for(unsigned int i = 0; i < 150 && !End; i++){
           //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
           genetic.Reemplazar();
           genetic.Mutate();
@@ -197,7 +197,7 @@ int main(int argc, char* argv[]){
       for(unsigned int j = 0; j < 5; j++){
         End = false;
         Temporizador temp, timefun;
-        Memetico genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTest(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
+        Memetico genetic(conjuntoDatos.getParticionTrain(j),conjuntoDatos.getParticionTrain(j),conjuntoDatos.getDatos(),conjuntoDatos.getEtiquetas());
         genetic.initialize();
         genetic.OrdenateValue();
         cout << "----------------------------------------------" << endl;
@@ -206,7 +206,7 @@ int main(int argc, char* argv[]){
 
         temp.start();
         //cout << "Miembros de las seleccionados" << endl;
-        for(unsigned int i = 0; i < 15000 && !End; i++){
+        for(unsigned int i = 0; i < 1500 && !End; i++){
           //cout << "\nNUEVO REEMPLAZAMIENTO nº"<< i << endl;
           genetic.Reemplazar();
           genetic.Mutate();
